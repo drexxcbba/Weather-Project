@@ -1,24 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment, useState, useEffect } from 'react';
+import Header from './components/Header';
+import Form from './components/Form';
 
 function App() {
+ 
+  const [search, setSearch] = useState({
+    city: '',
+    country: ''
+  });
+
+  const [query, setQuery] = useState(false);
+
+  const [result, setResult] = useState({});
+
+  const { city, country } = search;
+
+  useEffect( () => {
+    const queryAPI = async () => {
+      if(query){
+        const appId = '141b0674d5fee4423f1c4aba050d8ae0';
+        const url = `http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${appId}`;
+        const res = await fetch(url);
+        const final = await res.json();
+        setResult(final);
+      }
+    }
+    queryAPI();
+  }, [query]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <Header 
+       titulo="Clima React App"
+       />
+       <div className="contenedor-form">
+         <div className="container">
+           <div className="row">
+             <div className="col m6 s12">
+               <Form 
+                search={search}
+                setSearch={setSearch}
+                setQuery={setQuery}
+              />
+             </div>
+             <div className="col m6 s12">
+               2
+             </div>
+           </div>
+         </div>
+       </div>
+    </Fragment>
   );
 }
 
