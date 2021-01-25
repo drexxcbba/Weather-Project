@@ -23,7 +23,7 @@ function App() {
     const queryAPI = async () => {
       if(query){
         const appId = '141b0674d5fee4423f1c4aba050d8ae0';
-        const url = `http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${appId}`;
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${appId}`;
         const res = await fetch(url);
         const final = await res.json();
         setResult(final);
@@ -36,6 +36,7 @@ function App() {
       }
     }
     queryAPI();
+    //eslint-disable-next-line
   }, [query]);
 
   let component;
