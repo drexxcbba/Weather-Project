@@ -1,6 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import Header from './components/Header';
 import Form from './components/Form';
+import Weather from './components/Weather';
+import Error from './components/Error';
 
 function App() {
  
@@ -13,6 +15,8 @@ function App() {
 
   const [result, setResult] = useState({});
 
+  const [error, setError] = useState(false);
+
   const { city, country } = search;
 
   useEffect( () => {
@@ -23,10 +27,23 @@ function App() {
         const res = await fetch(url);
         const final = await res.json();
         setResult(final);
+        setQuery(false);
+        if(result.cod === "404"){
+          setError(true);
+        }else{
+          setError(false);
+        }
       }
     }
     queryAPI();
   }, [query]);
+
+  let component;
+  if(error){
+    component = <Error message="No hay resultados" />
+  }else{
+    component = <Weather resultOne={result} />
+  }
 
   return (
     <Fragment>
@@ -44,7 +61,7 @@ function App() {
               />
              </div>
              <div className="col m6 s12">
-               2
+               {component}
              </div>
            </div>
          </div>
